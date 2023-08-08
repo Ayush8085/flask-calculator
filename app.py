@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import sqlite3
 
 app = Flask(__name__)
@@ -17,17 +17,25 @@ cur.execute('''
 ''')
 conn.commit()
 
+@app.route('/', methods=['GET'])
+def home():
+    return render_template('calcu.html')
+
+
 # Endpoint for addition
 @app.route('/api', methods=['POST'])
 def solve():
     data = request.json
 
-    result = eval(data['expression'])
 
-    # Save in sqlite
+    result = eval(str(data['expression']))
+    print(data['expression'])
+    print(result)
+
+    # Connect to DB
     conn = sqlite3.connect('cal1.sqlite')
     cur = conn.cursor()
-
+    # Save in sqlite
     cur.execute('INSERT INTO calculations (operation, expression, result) VALUES (?, ?, ?)',
               ('add', data['expression'], result))
     conn.commit()
