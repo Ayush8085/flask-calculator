@@ -45,5 +45,18 @@ def divide():
     result = data['num1'] / data['num2']
     return jsonify({'result': result})
 
+# Endpoint for division
+@app.route('/modulo', methods=['POST'])
+def modulo():
+    data = request.json
+    if 'num1' not in data or 'num2' not in data:
+        return jsonify({'error': 'Invalid input'}), 400
+
+    if data['num2'] == 0:
+        return jsonify({'error': 'Division by zero'}), 400
+
+    result = data['num1'] % data['num2']
+    return jsonify({'result': result})
+
 if __name__ == '__main__':
     app.run(debug=True)
