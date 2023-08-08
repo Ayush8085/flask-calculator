@@ -1,66 +1,49 @@
 from flask import Flask, request, jsonify
+
 app = Flask(__name__)
 
-# -------------Addition---------------
+# Endpoint for addition
 @app.route('/add', methods=['POST'])
 def add():
     data = request.json
-    print(data)
-    if 'numbers' not in data:
+    if 'num1' not in data or 'num2' not in data:
         return jsonify({'error': 'Invalid input'}), 400
 
-    result = sum(data['numbers'])
+    result = data['num1'] + data['num2']
     return jsonify({'result': result})
 
-# -------------Substraction---------------
+# Endpoint for subtraction
 @app.route('/subtract', methods=['POST'])
 def subtract():
     data = request.json
-    if 'numbers' not in data:
+    if 'num1' not in data or 'num2' not in data:
         return jsonify({'error': 'Invalid input'}), 400
 
-    result = data['numbers'][0] - sum(data['numbers'][1:])
+    result = data['num1'] - data['num2']
     return jsonify({'result': result})
 
-# -------------Multiplication---------------
+# Endpoint for multiplication
 @app.route('/multiply', methods=['POST'])
 def multiply():
     data = request.json
-    if 'numbers' not in data:
+    if 'num1' not in data or 'num2' not in data:
         return jsonify({'error': 'Invalid input'}), 400
 
-    result = 1
-    for num in data['numbers']:
-        result *= num
+    result = data['num1'] * data['num2']
     return jsonify({'result': result})
 
-# -------------Division---------------
+# Endpoint for division
 @app.route('/divide', methods=['POST'])
 def divide():
     data = request.json
-    if 'numbers' not in data:
+    if 'num1' not in data or 'num2' not in data:
         return jsonify({'error': 'Invalid input'}), 400
 
-    if 0 in data['numbers'][1:]:
+    if data['num2'] == 0:
         return jsonify({'error': 'Division by zero'}), 400
 
-    result = data['numbers'][0]
-    for num in data['numbers'][1:]:
-        result /= num
+    result = data['num1'] / data['num2']
     return jsonify({'result': result})
 
-# -------------Division---------------
-@app.route('/modulo', methods=['POST'])
-def mod():
-    data = request.json
-    if 'numbers' not in data:
-        return jsonify({'error': 'Invalid input'}), 400
-
-    result = data['numbers'][0]
-    for num in data['numbers'][1:]:
-        result /= num
-    return jsonify({'result': result})
-
-
-if __name__=='__main__':
+if __name__ == '__main__':
     app.run(debug=True)
